@@ -1,0 +1,406 @@
+<template>
+  <div>
+    <el-card class="box-card" style="margin-bottom: 10px;">
+      <div class="demobox">
+        <div class="demo-input-suffix">
+          <span>容 器 名 ：</span>
+          <el-input @change="containerchange" @focus="change1" placeholder="请输入容器名" v-model="input"></el-input>JDK版本号 ：
+          <el-autocomplete
+            v-model="state4"
+            :fetch-suggestions="querySearchAsync"
+            placeholder="请选择"
+            @select="handleSelect1"
+          ></el-autocomplete>
+        </div>
+
+        <div style="margin-top: 10px">镜 像 名 ：
+          <el-autocomplete
+            popper-class="my-autocomplete"
+            v-model="state3"
+            :fetch-suggestions="querySearch"
+            placeholder="请选择"
+            @select="handleSelect"
+          >
+            <template slot-scope="{ item }">
+              <div class="name">{{ item.value }}</div>
+              <span class="addr">{{ item.address }}</span>
+            </template>
+          </el-autocomplete>Tomcat版本 :
+          <el-autocomplete
+            v-model="state2"
+            :fetch-suggestions="querySearchAsync2"
+            placeholder="请选择"
+            @select="handleSelect2"
+          ></el-autocomplete>
+          <div style="margin-top: 1px;position: absolute ;right: 60px; bottom: 10px;">
+            <el-button type="danger" plain>提交</el-button>
+          </div>
+          <!--分割线-->
+          <!-- <div style="border-bottom: 1px solid lightgray; width: 700px;margin-top: 60px"></div>-->
+        </div>
+      </div>
+    </el-card>
+
+    <div style="float: right;padding-right: 50px;margin-bottom:10px">
+      <el-button>启动</el-button>
+      <el-button>停止</el-button>
+      <el-button>重启</el-button>
+    </div>
+    <el-table
+      ref="singleTable"
+      :data="tableData3"
+      highlight-current-row
+      @current-change="handleCurrentChange"
+      height="300"
+      style="width: 100%"
+      @row-click="showRow"
+    >
+      <el-table-column label="选择" width="50" align="center">
+        <template slot-scope="scope">
+          <el-radio class="radio" text-color="#111" v-model="radio" :label="scope.$index">&nbsp;</el-radio>
+        </template>
+      </el-table-column>
+      <el-table-column type="index" width="55"></el-table-column>
+      <!--      <el-table-column
+        fixed
+        type="index"
+        width="50">
+      </el-table-column>-->
+      <el-table-column property="date" label="日期" width="150"></el-table-column>
+      <el-table-column property="name" label="姓名" width="120"></el-table-column>
+      <el-table-column property="port" label="地址"></el-table-column>
+      <el-table-column  >
+        <template slot="header" slot-scope="scope">
+          <el-input v-model="search" size="mini" placeholder="输入关键字搜索"/>
+        </template>
+        <template slot-scope="scope">
+          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">详情</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <Alert :tableData31="tableData31" v-if=Edit @cancel=fn() ></Alert>
+
+  </div>
+</template>
+
+<script>
+  import Alert from '@/common/alert.vue'
+export default {
+  name: "page1",
+  components:{
+    Alert:Alert
+  },
+  data() {
+    
+    return {
+      Edit:false,
+      //容器名
+      input: "",
+      //镜像名
+      restaurants: [],
+      state3: "",
+      //jdk版本
+      restaurants1: [],
+      state4: "",
+      timeout: null,
+      //tomcat版本
+      restaurants2: [],
+      state2: "",
+      timeout2: null,
+      //table
+      currentRow: null,
+      tableData31:[{date:'',name:'',port:''}],
+      tableData3: [
+        {
+          date: "容器名",
+          name: "镜像1",
+          port: "6706",
+          status: "是",
+          mainManageBrand: 0
+        },
+        {
+          date: "容器名2",
+          name: "镜像2",
+          port: "6706",
+          status: "是",
+          mainManageBrand: 0
+        },
+        {
+          date: "容器名3",
+          name: "镜像3",
+          port: "6706",
+          status: "是"
+        },
+        {
+          date: "容器名4",
+          name: "镜像4",
+          port: "6706",
+          status: "是"
+        },
+        {
+          date: "容器名5",
+          name: "镜像5",
+          port: "6706",
+          status: "是"
+        },
+        {
+          date: "容器名6",
+          name: "镜像6",
+          port: "6706",
+          status: "是"
+        },
+        {
+          date: "容器名7",
+          name: "镜像7",
+          port: "6706",
+          status: "是"
+        }
+      ],
+      multipleSelection: [],
+      //  radio: '1'单选
+      radio: "1",
+      search: ""
+    };
+
+  },
+  methods: {
+    fn(){
+      this.Edit=false;
+    },
+    //容器名改变  正则
+    containerchange(val) {
+      console.log(val, "container");
+      var reg = /^[0-9a-zA-Z_]{1,}$/g;
+      if (reg.test(val)) {
+        this.input = val;
+        console.log(this.input);
+      } else {
+        alert("请不要输入空格、特殊字符!,?,()");
+        this.input = "";
+      }
+    },
+    change1(val) {
+      console.log(val, "containerfocus");
+    },
+    //镜像名
+    querySearch(queryString, cb) {
+      var restaurants = this.restaurants;
+      var results = queryString
+        ? restaurants.filter(this.createFilter(queryString))
+        : restaurants;
+      // 调用 callback 返回建议列表的数据
+      cb(results);
+    },
+    createFilter(queryString) {
+      return restaurant => {
+        return (
+          restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) ===
+          0
+        );
+      };
+    },
+    loadAll() {
+      return [
+        { value: "三全鲜食（北新泾店）", address: "长宁区新渔路144号" },
+        {
+          value: "Hot honey 首尔炸鸡（仙霞路）",
+          address: "上海市长宁区淞虹路661号"
+        },
+        {
+          value: "新旺角茶餐厅",
+          address: "上海市普陀区真北路988号创邑金沙谷6号楼113"
+        },
+        { value: "泷千家(天山西路店)", address: "天山西路438号" },
+        {
+          value: "胖仙女纸杯蛋糕（上海凌空店）",
+          address: "上海市长宁区金钟路968号1幢18号楼一层商铺18-101"
+        },
+        { value: "贡茶", address: "上海市长宁区金钟路633号" },
+        {
+          value: "豪大大香鸡排超级奶爸",
+          address: "上海市嘉定区曹安公路曹安路1685号"
+        },
+        {
+          value: "茶芝兰（奶茶，手抓饼）",
+          address: "上海市普陀区同普路1435号"
+        },
+        { value: "十二泷町", address: "上海市北翟路1444弄81号B幢-107" }
+      ];
+    },
+    handleSelect(item) {
+      console.log(item);
+    },
+    handleIconClick(ev) {
+      console.log(ev);
+    },
+    //jdk版本
+    loadAll1() {
+      return [
+        { value: "三全鲜食（北新泾店）", address: "长宁区新渔路144号" },
+        {
+          value: "Hot honey 首尔炸鸡（仙霞路）",
+          address: "上海市长宁区淞虹路661号"
+        },
+        {
+          value: "新旺角茶餐厅",
+          address: "上海市普陀区真北路988号创邑金沙谷6号楼113"
+        },
+        { value: "泷千家(天山西路店)", address: "天山西路438号" },
+        {
+          value: "胖仙女纸杯蛋糕（上海凌空店）",
+          address: "上海市长宁区金钟路968号1幢18号楼一层商铺18-101"
+        }
+      ];
+    },
+    querySearchAsync(queryString, cb) {
+      var restaurants = this.restaurants1;
+      var results = queryString
+        ? restaurants.filter(this.createStateFilter(queryString))
+        : restaurants;
+
+      clearTimeout(this.timeout);
+      this.timeout = setTimeout(() => {
+        cb(results);
+      }, 3000 * Math.random());
+    },
+    createStateFilter(queryString) {
+      return state => {
+        return (
+          state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
+        );
+      };
+    },
+    handleSelect1(item) {
+      console.log(item);
+    },
+    //tomcat版本下拉
+    loadAll2() {
+      return [
+        { value: "三全鲜食（北新泾店）", address: "长宁区新渔路144号" },
+        {
+          value: "Hot honey 首尔炸鸡（仙霞路）",
+          address: "上海市长宁区淞虹路661号"
+        },
+        {
+          value: "新旺角茶餐厅",
+          address: "上海市普陀区真北路988号创邑金沙谷6号楼113"
+        },
+        { value: "泷千家(天山西路店)", address: "天山西路438号" },
+        {
+          value: "胖仙女纸杯蛋糕（上海凌空店）",
+          address: "上海市长宁区金钟路968号1幢18号楼一层商铺18-101"
+        }
+      ];
+    },
+    querySearchAsync2(queryString, cb) {
+      var restaurants = this.restaurants2;
+      var results = queryString
+        ? restaurants.filter(this.createStateFilter(queryString))
+        : restaurants;
+
+      clearTimeout(this.timeout);
+      this.timeout = setTimeout(() => {
+        cb(results);
+      }, 3000 * Math.random());
+    },
+    createStateFilter2(queryString) {
+      return state => {
+        return (
+          state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
+        );
+      };
+    },
+    handleSelect2(item) {
+      console.log(item);
+    },
+    //table
+    toggleSelection(rows) {
+      if (rows) {
+        rows.forEach(row => {
+          this.$refs.multipleTable.toggleRowSelection(row);
+        });
+      } else {
+        this.$refs.multipleTable.clearSelection();
+      }
+    },
+    handleSelectionChange(val) {
+      console.log(val, "选中的行");
+      this.multipleSelection = val;
+    },
+    //详情
+    handleEdit(index, row) {
+     this.tableData31=row;
+     this.Edit=true;
+      console.log(index, row);
+    },
+    //table
+    handleCurrentChange(val) {
+      console.log(val.date, "选中的哪一行");
+      this.currentRow = val;
+    },
+    showRow(row) {
+      this.radio = this.tableData3.indexOf(row);
+      this.selected = row;
+    }
+  },
+
+  mounted() {
+    //镜像名
+    this.restaurants = this.loadAll();
+    //jdk版本
+    this.restaurants1 = this.loadAll1();
+    //Tomcat版本
+    this.restaurants2 = this.loadAll2();
+  }
+};
+</script>
+
+<style scoped>
+.demobox {
+  height: 130px;
+  position: relative;
+  /*padding-left: 50px;*/
+}
+
+.el-input {
+  width: 200px;
+}
+
+.demo-input-suffix {
+}
+</style>
+<style lang="less">
+/*  .el-input el-input--small el-input--prefix{
+      width: 400px;
+    }*/
+
+.my-autocomplete {
+  li {
+    line-height: normal;
+    padding: 7px;
+
+    .name {
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .addr {
+      font-size: 12px;
+      color: #b4b4b4;
+    }
+
+    .highlighted .addr {
+      color: #ddd;
+    }
+  }
+}
+
+//卡片的背景颜色
+.el-card {
+  background: lightcyan;
+  font-family: "微软雅黑";
+}
+.el-input--mini .el-input__inner{
+  width:158px;
+}
+</style>
