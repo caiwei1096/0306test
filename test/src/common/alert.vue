@@ -36,10 +36,10 @@ export default {
 
   ul {
     position: relative;
-    width: 600px;
-    height: 400px;
+    width: 800px;
+    height: 1000px;
     top: 50%;
-    margin: -200px auto 0;
+    margin: -200px auto ;
     background: #fff;
     .icon {
       position: absolute;

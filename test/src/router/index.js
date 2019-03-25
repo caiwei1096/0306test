@@ -6,7 +6,7 @@ import page1 from '@/components/home/page1.vue'
 import page2 from '@/components/home/page2.vue'
 import page3 from '@/components/home/page3.vue'
 import page4 from '@/components/home/page4.vue'
-
+import pagehome from  '@/components/home/index.vue'
 
 
 Vue.use(Router)
@@ -22,8 +22,13 @@ export default new Router({
       path:'/home',
       name: "home",
       component:Home,
-      redirect:'/page1',
+      redirect:'/index',
       children:[
+        {
+          path:'/index',
+          component:pagehome,
+          name:'index'
+        },
         {
           path:'/page1',
           component:page1,

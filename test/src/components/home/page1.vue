@@ -3,41 +3,68 @@
     <el-card class="box-card" style="margin-bottom: 10px;">
       <div class="demobox">
         <div class="demo-input-suffix">
-          <span>容 器 名 ：</span>
-          <el-input @change="containerchange" @focus="change1" placeholder="请输入容器名" v-model="input"></el-input>JDK版本号 ：
-          <el-autocomplete
-            v-model="state4"
-            :fetch-suggestions="querySearchAsync"
-            placeholder="请选择"
-            @select="handleSelect1"
-          ></el-autocomplete>
-        </div>
+          <div class="box1">
+            <span>容 器 名：</span>
+            <el-input
+              @change="containerchange"
+              @focus="change1"
+              placeholder="请输入容器名"
+              v-model="input"
+            ></el-input>
+            <span>端口号 port：</span>
+            <el-input
+              @change="containerchange2"
+              @focus="change2"
+              placeholder="请输入端口号"
+              v-model="input2"
+            ></el-input>
+          </div>
 
-        <div style="margin-top: 10px">镜 像 名 ：
-          <el-autocomplete
-            popper-class="my-autocomplete"
-            v-model="state3"
-            :fetch-suggestions="querySearch"
-            placeholder="请选择"
-            @select="handleSelect"
-          >
-            <template slot-scope="{ item }">
-              <div class="name">{{ item.value }}</div>
-              <span class="addr">{{ item.address }}</span>
-            </template>
-          </el-autocomplete>Tomcat版本 :
-          <el-autocomplete
-            v-model="state2"
-            :fetch-suggestions="querySearchAsync2"
-            placeholder="请选择"
-            @select="handleSelect2"
-          ></el-autocomplete>
-          <div style="margin-top: 1px;position: absolute ;right: 60px; bottom: 10px;">
+          <div class="box2">
+            <span>JDK版本：</span>
+            <el-autocomplete
+              v-model="state4"
+              :fetch-suggestions="querySearchAsync"
+              placeholder="请选择"
+              @select="handleSelect1"
+            ></el-autocomplete>
+            <span>宿主机目录：</span>
+            <el-input
+              @change="containerchange3"
+              @focus="change3"
+              placeholder="请输入宿主机目录"
+              v-model="input3"
+            ></el-input>
+          </div>
+          <div class="box3">
+            <span>镜 像 名 ：</span>
+            <el-autocomplete
+              popper-class="my-autocomplete"
+              v-model="state3"
+              :fetch-suggestions="querySearch"
+              placeholder="请选择"
+              @select="handleSelect"
+            >
+              <template slot-scope="{ item }">
+                <div class="name">{{ item.value }}</div>
+                <span class="addr">{{ item.address }}</span>
+              </template>
+            </el-autocomplete>
+            <span>Tomcat版本 :</span>
+            <el-autocomplete
+              v-model="state2"
+              :fetch-suggestions="querySearchAsync2"
+              placeholder="请选择"
+              @select="handleSelect2"
+            ></el-autocomplete>
+          </div>
+          <div class="box4">
             <el-button type="danger" plain>提交</el-button>
           </div>
-          <!--分割线-->
-          <!-- <div style="border-bottom: 1px solid lightgray; width: 700px;margin-top: 60px"></div>-->
         </div>
+
+        <!--分割线-->
+        <!-- <div style="border-bottom: 1px solid lightgray; width: 700px;margin-top: 60px"></div>-->
       </div>
     </el-card>
 
@@ -69,7 +96,7 @@
       <el-table-column property="date" label="日期" width="150"></el-table-column>
       <el-table-column property="name" label="姓名" width="120"></el-table-column>
       <el-table-column property="port" label="地址"></el-table-column>
-      <el-table-column  >
+      <el-table-column>
         <template slot="header" slot-scope="scope">
           <el-input v-model="search" size="mini" placeholder="输入关键字搜索"/>
         </template>
@@ -78,24 +105,26 @@
         </template>
       </el-table-column>
     </el-table>
-    <Alert :tableData31="tableData31" v-if=Edit @cancel=fn() ></Alert>
-
+    <Alert :tableData31="tableData31" v-if="Edit" @cancel="fn()"></Alert>
   </div>
 </template>
 
 <script>
-  import Alert from '@/common/alert.vue'
+import Alert from "@/common/alert.vue";
 export default {
   name: "page1",
-  components:{
-    Alert:Alert
+  components: {
+    Alert: Alert
   },
   data() {
-    
     return {
-      Edit:false,
+      Edit: false,
       //容器名
       input: "",
+      //端口名
+      input2: "",
+      //宿主机目录
+      input3: "",
       //镜像名
       restaurants: [],
       state3: "",
@@ -109,7 +138,7 @@ export default {
       timeout2: null,
       //table
       currentRow: null,
-      tableData31:[{date:'',name:'',port:''}],
+      tableData31: [{ date: "", name: "", port: "" }],
       tableData3: [
         {
           date: "容器名",
@@ -161,11 +190,10 @@ export default {
       radio: "1",
       search: ""
     };
-
   },
   methods: {
-    fn(){
-      this.Edit=false;
+    fn() {
+      this.Edit = false;
     },
     //容器名改变  正则
     containerchange(val) {
@@ -182,6 +210,39 @@ export default {
     change1(val) {
       console.log(val, "containerfocus");
     },
+    //端口号
+    containerchange2(val) {
+      console.log(val, "container");
+      // var reg=/^[89][0-9]+[0-9]+[0-9]+$/g;
+      var reg = /^((8[0-9][0-9][0-9])|^(9000))$/g;
+      if (reg.test(val)) {
+        this.input2 = val;
+        console.log(this.input);
+      } else {
+        alert("请输入8000-9000之间的数字");
+        this.input2 = "";
+      }
+    },
+    change2(val) {
+      console.log(val, "containerfocus");
+    },
+    //宿主机目录
+    containerchange3(val) {
+      console.log(val, "container");
+      // var reg=/^[89][0-9]+[0-9]+[0-9]+$/g;
+      var reg = /^[\u4E00-\u9FA5]+$/g;
+      if (reg.test(val)) {
+        this.input3 = val;
+        console.log(this.input);
+      } else {
+        alert("请输入文本");
+        this.input3 = "";
+      }
+    },
+    change3(val) {
+      console.log(val, "containerfocus");
+    },
+
     //镜像名
     querySearch(queryString, cb) {
       var restaurants = this.restaurants;
@@ -329,8 +390,8 @@ export default {
     },
     //详情
     handleEdit(index, row) {
-     this.tableData31=row;
-     this.Edit=true;
+      this.tableData31 = row;
+      this.Edit = true;
       console.log(index, row);
     },
     //table
@@ -355,11 +416,25 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang='less'>
 .demobox {
   height: 130px;
   position: relative;
   /*padding-left: 50px;*/
+  .box1 {
+    text-align: left;
+    margin-bottom: 5px;
+  }
+  .box2 {
+    margin-bottom: 5px;
+    text-align: left;
+  }
+  .box3 {
+    text-align: left;
+  }
+  .box4 {
+    text-align: right;
+  }
 }
 
 .el-input {
@@ -400,7 +475,7 @@ export default {
   background: lightcyan;
   font-family: "微软雅黑";
 }
-.el-input--mini .el-input__inner{
-  width:158px;
+.el-input--mini .el-input__inner {
+  width: 158px;
 }
 </style>
