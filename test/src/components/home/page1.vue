@@ -59,6 +59,7 @@
             ></el-autocomplete>
           </div>
           <div class="box4">
+            <span class='box41'>{{showbox}}</span>
             <el-button type="danger" plain>提交</el-button>
           </div>
         </div>
@@ -118,6 +119,8 @@ export default {
   },
   data() {
     return {
+      //提示框
+      showbox: "",
       Edit: false,
       //容器名
       input: "",
@@ -201,9 +204,11 @@ export default {
       var reg = /^[0-9a-zA-Z_]{1,}$/g;
       if (reg.test(val)) {
         this.input = val;
+        this.showbox = "";
         console.log(this.input);
       } else {
-        alert("请不要输入空格、特殊字符!,?,()");
+        // alert("请不要输入空格、特殊字符!,?,()");
+        this.showbox = "提示：请不要输入空格、特殊字符!,?,()";
         this.input = "";
       }
     },
@@ -433,8 +438,19 @@ export default {
     text-align: left;
   }
   .box4 {
-    text-align: right;
+    margin-top:1px;
+    position: relative;
+    .el-button--danger.is-plain{
+      position: absolute;
+      right: 0px;
+      top:0px;
+    }
+    .box41{
+      color:red;
+     font-family: "宋体"
+    }
   }
+ 
 }
 
 .el-input {

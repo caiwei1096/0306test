@@ -4,12 +4,7 @@
     <bookmark url="file://$PROJECT_DIR$/test/src/components/HelloWorld.vue" description="}" line="16" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0616b1db-a6af-4f0b-a2d4-a19fb91f0a91" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/1.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/src/components/home/page1.vue" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/components/home/page1.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/router/index.js" afterDir="false" />
-    </list>
+    <list default="true" id="0616b1db-a6af-4f0b-a2d4-a19fb91f0a91" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -69,8 +64,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test/src/components/home/page1.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2200">
-              <caret line="88" column="40" selection-start-line="88" selection-start-column="40" selection-end-line="88" selection-end-column="40" />
+            <state relative-caret-position="2800">
+              <caret line="112" column="39" selection-start-line="112" selection-start-column="39" selection-end-line="112" selection-end-column="39" />
             </state>
           </provider>
         </entry>
@@ -260,11 +255,12 @@
       <workItem from="1553319525622" duration="998000" />
       <workItem from="1553327031584" duration="595000" />
       <workItem from="1553333073661" duration="290000" />
+      <workItem from="1553745281607" duration="27000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="26552000" />
+    <option name="totallyTimeSpent" value="26579000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -364,8 +360,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test/src/components/home/page1.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2200">
-          <caret line="88" column="40" selection-start-line="88" selection-start-column="40" selection-end-line="88" selection-end-column="40" />
+        <state relative-caret-position="2800">
+          <caret line="112" column="39" selection-start-line="112" selection-start-column="39" selection-end-line="112" selection-end-column="39" />
         </state>
       </provider>
     </entry>
