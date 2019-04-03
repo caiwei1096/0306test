@@ -3,9 +3,13 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+//axios 请求
+import axios from 'axios'
+Vue.prototype.$axios = axios;
+axios.defaults.baseURL =  " https://www.easy-mock.com/mock/5ca49105ea0dc52bf3b67ea8/testdate";
 
+// import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
-
 import {
   Pagination,
   Dialog,
@@ -152,7 +156,7 @@ Vue.prototype.$notify = Notification;
 Vue.prototype.$message = Message;
 
 Vue.config.productionTip = false
-
+Vue.prototype.$http = axios;
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

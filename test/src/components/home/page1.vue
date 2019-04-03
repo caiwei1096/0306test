@@ -59,8 +59,8 @@
             ></el-autocomplete>
           </div>
           <div class="box4">
-            <span class='box41'>{{showbox}}</span>
-            <el-button type="danger" plain>提交</el-button>
+            <span class="box41">{{showbox}}</span>
+            <el-button type="danger" @click="submit" plain>提交</el-button>
           </div>
         </div>
 
@@ -112,6 +112,7 @@
 
 <script>
 import Alert from "@/common/alert.vue";
+import axios from "axios";
 export default {
   name: "page1",
   components: {
@@ -194,6 +195,12 @@ export default {
       search: ""
     };
   },
+  created() {
+    console.log(1,'date1')
+    axios.get("/data").then((date)=>{
+      console.log(date,'date')
+    });
+  },
   methods: {
     fn() {
       this.Edit = false;
@@ -208,7 +215,7 @@ export default {
         console.log(this.input);
       } else {
         // alert("请不要输入空格、特殊字符!,?,()");
-        this.showbox = "提示：请不要输入空格、特殊字符!,?,()";
+        this.showbox = "提示：容器名 请不要输入空格、特殊字符!,?,()";
         this.input = "";
       }
     },
@@ -222,9 +229,11 @@ export default {
       var reg = /^((8[0-9][0-9][0-9])|^(9000))$/g;
       if (reg.test(val)) {
         this.input2 = val;
+        this.showbox = "";
         console.log(this.input);
       } else {
-        alert("请输入8000-9000之间的数字");
+        // alert("请输入8000-9000之间的数字");
+        this.showbox = "提示：端口号 请输入8000-9000之间的数字";
         this.input2 = "";
       }
     },
@@ -238,9 +247,11 @@ export default {
       var reg = /^[\u4E00-\u9FA5]+$/g;
       if (reg.test(val)) {
         this.input3 = val;
+        this.showbox = "";
         console.log(this.input);
       } else {
-        alert("请输入文本");
+        // alert("请输入文本");
+        this.showbox = "提示：宿主机目录 请输入文本";
         this.input3 = "";
       }
     },
@@ -337,7 +348,7 @@ export default {
       };
     },
     handleSelect1(item) {
-      console.log(item);
+      console.log(item, "jdk版本号吗"); //
     },
     //tomcat版本下拉
     loadAll2() {
@@ -407,6 +418,25 @@ export default {
     showRow(row) {
       this.radio = this.tableData3.indexOf(row);
       this.selected = row;
+    },
+    //提交按钮
+    submit() {
+      console.log("提交方法");
+      console.log(this.input, "容器名");
+      console.log(this.input2, "端口号");
+      //console.log(this.)
+      console.log(this.state4, "jdk版本");
+      console.log(this.input3, "宿主机目录");
+      console.log(this.state3, "镜像名");
+      console.log(this.state2, "Tomcat版本");
+      alert(
+        `容器名${this.input} ` +
+          `端口号是${this.input2} ` +
+          `jdk版本是${this.state4} ` +
+          `宿主机目录是${this.input3} ` +
+          `镜像名是${this.state3} ` +
+          `tomcat版本是${this.state2}`
+      );
     }
   },
 
@@ -438,19 +468,18 @@ export default {
     text-align: left;
   }
   .box4 {
-    margin-top:1px;
+    margin-top: 1px;
     position: relative;
-    .el-button--danger.is-plain{
+    .el-button--danger.is-plain {
       position: absolute;
       right: 0px;
-      top:0px;
+      top: 0px;
     }
-    .box41{
-      color:red;
-     font-family: "宋体"
+    .box41 {
+      color: red;
+      font-family: "宋体";
     }
   }
- 
 }
 
 .el-input {
