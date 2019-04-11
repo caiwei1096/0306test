@@ -64,7 +64,7 @@
 
           <div class="box4">
             <span class="box41">{{showbox}}</span>
-            <el-button type="danger" @click="submit" plain>提交</el-button>
+            <el-button type="danger" @click="submit" plain :disabled=isDisable>提交</el-button>
           </div>
         </div>
 
@@ -74,7 +74,7 @@
     </el-card>
 
     <div style="float: right;padding-right: 50px;margin-bottom:10px">
-      <el-button @click="startup">启动</el-button>
+      <el-button @click="startup" :disabled="isDisable">启动</el-button>
       <el-button @click="stop">停止</el-button>
       <el-button @click="restart">重启</el-button>
     </div>
@@ -203,16 +203,18 @@ export default {
       multipleSelection: [],
       //  radio: '1'单选
       radio: "1",
-      search: ""
+      search: "",
+      //不能连续提交  isDisable
+      isDisable: false
     };
   },
   created() {
-    // console.log(1, "created 发请求date1");
-    // var obj = { name: 2, password: "3" };
-    // axios.post("/what", obj).then(date => {
-    //   console.log(date.data.data.arr, "arr");
-    //   console.log(date, "date", obj);
-    // });
+    console.log(1, "created 发请求date1");
+    var obj = { name: 2, password: "3" };
+    axios.post('/what',obj).then(date => {
+      console.log( "arr");
+      // console.log(date, "date", obj);
+    });
   },
   computed: {
     // 模糊搜索
@@ -455,7 +457,7 @@ export default {
     },
     //table
     handleCurrentChange(val) {
-      console.log(  val, "选中的哪一行");
+      console.log(val, "选中的哪一行");
       this.currentRow = val;
     },
     showRow(row) {
@@ -482,42 +484,62 @@ export default {
       // );
       var obj = {
         容器名: this.input,
-        端口号: "this.input2",
-        jdk版本: "this.state4",
-        宿主机目录: "this.input3",
+        端口号: this.input2,
+        jdk版本: this.state4,
+        宿主机目录: this.input3,
         镜像名: this.state3,
         tomcat版本: this.state2
       };
+      this.isDisable=true
       //发请求
       axios.post("/what", obj).then(date => {
         console.log(date.data.arr);
         console.log(obj, "post2", date, "请求的数据2");
+        this.isDisable=true;
+        setTimeout(()=>{
+          this.isDisable=false;
+        },200)
       });
     },
     //启动
     startup() {
       if (this.currentRow) {
-        axios.post("/what", this.currentRow.id).then(date => {
+        this.isDisable = true; //开始可以点击
+        axios.post("/what",{'id': this.currentRow.id}).then(date => {
           console.log(this.currentRow.id, "进入请求选中启动的行");
+          setTimeout(() => {
+            this.isDisable = false;
+          }, 500);
+          this.isDisable = true; //执行请求后不可以点击了  2s延迟
         });
       } else {
         alert("请选择启动的行");
       }
     },
     //停止
-    stop(){
+    stop() {
       if (this.currentRow) {
+        this.isDisable = true;
         axios.post("/what", this.currentRow.id).then(date => {
           console.log(this.currentRow.id, "进入请求选中停止的行");
+          setTimeout(() => {
+            this.isDisable = false;
+          }, 500);
+          this.isDisable = true;
         });
       } else {
         alert("请选择停止的行");
       }
     },
-    restart(){
-            if (this.currentRow) {
+    restart() {
+      if (this.currentRow) {
+        this.isDisable = true;
         axios.post("/what", this.currentRow.id).then(date => {
           console.log(this.currentRow.id, "进入请求选中重启的行");
+          setTimeout(() => {
+            this.isDisable = false;
+          }, 500);
+          this.isDisable = true;
         });
       } else {
         alert("请选择重启的行");

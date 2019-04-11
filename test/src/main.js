@@ -3,11 +3,29 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-//axios 请求
+//导入  axios 
 import axios from 'axios'
+import qs from "qs"
+//将axios挂载到原型上
 Vue.prototype.$axios = axios;
 axios.defaults.baseURL =  " https://www.easy-mock.com/mock/5ca49105ea0dc52bf3b67ea8/testdate";
 
+添加请求拦截器
+axios.interceptors.request.use(function (config) {
+    // 参数格式转换
+    console.log(config,'config')
+    if(config.method=="post"){
+      console.log(config.data,'拦截器')
+        config.data = qs.stringify(config.data);
+    }
+    return config;
+  }, function (error) {
+    // 对请求错误做些什么
+    return Promise.reject(error);
+  })
+
+
+//Vue.prototype.$http = axios;
 // import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import {
@@ -156,7 +174,7 @@ Vue.prototype.$notify = Notification;
 Vue.prototype.$message = Message;
 
 Vue.config.productionTip = false
-Vue.prototype.$http = axios;
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
