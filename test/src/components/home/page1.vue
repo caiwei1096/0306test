@@ -94,9 +94,9 @@
         type="index"
         width="50">
       </el-table-column>-->
-      <el-table-column property="date" label="日期" width="150"></el-table-column>
-      <el-table-column property="name" label="姓名" width="120"></el-table-column>
-      <el-table-column property="port" label="地址"></el-table-column>
+      <el-table-column property="date" label="容器名" width="150"></el-table-column>
+      <el-table-column property="name" label="镜像名" width="120"></el-table-column>
+      <el-table-column property="port" label="端口号"></el-table-column>
       <el-table-column>
         <template slot="header" slot-scope="scope">
           <el-input v-model="search" size="mini" placeholder="输入关键字搜索"/>
@@ -196,9 +196,11 @@ export default {
     };
   },
   created() {
-    console.log(1,'date1')
-    axios.get("/data").then((date)=>{
-      console.log(date,'date')
+    console.log(1, "created 发请求date1");
+    var obj={name:2,password:'3'}
+    axios.post('/what', obj).then(date => {
+     console.log(date.data.data.arr,'arr')
+      console.log(date, "date", obj);
     });
   },
   methods: {
@@ -421,22 +423,29 @@ export default {
     },
     //提交按钮
     submit() {
-      console.log("提交方法");
-      console.log(this.input, "容器名");
-      console.log(this.input2, "端口号");
-      //console.log(this.)
-      console.log(this.state4, "jdk版本");
-      console.log(this.input3, "宿主机目录");
-      console.log(this.state3, "镜像名");
-      console.log(this.state2, "Tomcat版本");
-      alert(
-        `容器名${this.input} ` +
-          `端口号是${this.input2} ` +
-          `jdk版本是${this.state4} ` +
-          `宿主机目录是${this.input3} ` +
-          `镜像名是${this.state3} ` +
-          `tomcat版本是${this.state2}`
-      );
+      // console.log("提交方法");
+      // console.log(this.input, "容器名");
+      // console.log(this.input2, "端口号");
+      // //console.log(this.)
+      // console.log(this.state4, "jdk版本");
+      // console.log(this.input3, "宿主机目录");
+      // console.log(this.state3, "镜像名");
+      // console.log(this.state2, "Tomcat版本");
+      // alert(
+      //   `容器名${this.input} ` +
+      //     `端口号是${this.input2} ` +
+      //     `jdk版本是${this.state4} ` +
+      //     `宿主机目录是${this.input3} ` +
+      //     `镜像名是${this.state3} ` +
+      //     `tomcat版本是${this.state2}`
+      // );
+      var obj={'容器名':this.input,'端口号':'this.input2',
+              'jdk版本':'this.state4','宿主机目录':'this.input3',
+              '镜像名':this.state3,'tomcat版本':this.state2}
+      axios.post('/what',obj).then(date=>{
+        console.log(date.data.arr);
+        console.log(obj,'post2',date,'请求的数据2')
+      })
     }
   },
 

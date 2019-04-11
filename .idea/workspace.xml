@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0616b1db-a6af-4f0b-a2d4-a19fb91f0a91" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/src/components/home/page1.vue" beforeDir="false" afterPath="$PROJECT_DIR$/test/src/components/home/page1.vue" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -149,6 +148,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -215,7 +215,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -262,15 +261,15 @@
       <workItem from="1554185476581" duration="664000" />
       <workItem from="1554197848030" duration="595000" />
       <workItem from="1554200157853" duration="593000" />
+      <workItem from="1554867580320" duration="119000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="29132000" />
+    <option name="totallyTimeSpent" value="29251000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="19" y="0" width="1132" height="494" extended-state="1" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20292504" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
