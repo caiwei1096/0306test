@@ -28,6 +28,7 @@
               placeholder="请选择"
               @select="handleSelect1"
             ></el-autocomplete>
+
             <span>宿主机目录：</span>
             <el-input
               @change="containerchange3"
@@ -36,6 +37,7 @@
               v-model="input3"
             ></el-input>
           </div>
+
           <div class="box3">
             <span>镜 像 名 ：</span>
             <el-autocomplete
@@ -50,6 +52,7 @@
                 <span class="addr">{{ item.address }}</span>
               </template>
             </el-autocomplete>
+
             <span>Tomcat版本 :</span>
             <el-autocomplete
               v-model="state2"
@@ -58,6 +61,7 @@
               @select="handleSelect2"
             ></el-autocomplete>
           </div>
+
           <div class="box4">
             <span class="box41">{{showbox}}</span>
             <el-button type="danger" @click="submit" plain>提交</el-button>
@@ -70,13 +74,13 @@
     </el-card>
 
     <div style="float: right;padding-right: 50px;margin-bottom:10px">
-      <el-button>启动</el-button>
-      <el-button>停止</el-button>
-      <el-button>重启</el-button>
+      <el-button @click="startup">启动</el-button>
+      <el-button @click="stop">停止</el-button>
+      <el-button @click="restart">重启</el-button>
     </div>
     <el-table
       ref="singleTable"
-      :data="tableData3"
+      :data="table"
       highlight-current-row
       @current-change="handleCurrentChange"
       height="300"
@@ -145,6 +149,7 @@ export default {
       tableData31: [{ date: "", name: "", port: "" }],
       tableData3: [
         {
+          id: "1",
           date: "容器名",
           name: "镜像1",
           port: "6706",
@@ -152,6 +157,7 @@ export default {
           mainManageBrand: 0
         },
         {
+          id: "2",
           date: "容器名2",
           name: "镜像2",
           port: "6706",
@@ -159,30 +165,35 @@ export default {
           mainManageBrand: 0
         },
         {
+          id: "3",
           date: "容器名3",
           name: "镜像3",
           port: "6706",
           status: "是"
         },
         {
+          id: "4",
           date: "容器名4",
           name: "镜像4",
           port: "6706",
           status: "是"
         },
         {
+          id: "5",
           date: "容器名5",
           name: "镜像5",
           port: "6706",
           status: "是"
         },
         {
+          id: "6",
           date: "容器名6",
           name: "镜像6",
           port: "6706",
           status: "是"
         },
         {
+          id: "7",
           date: "容器名7",
           name: "镜像7",
           port: "6706",
@@ -196,12 +207,41 @@ export default {
     };
   },
   created() {
-    console.log(1, "created 发请求date1");
-    var obj={name:2,password:'3'}
-    axios.post('/what', obj).then(date => {
-     console.log(date.data.data.arr,'arr')
-      console.log(date, "date", obj);
-    });
+    // console.log(1, "created 发请求date1");
+    // var obj = { name: 2, password: "3" };
+    // axios.post("/what", obj).then(date => {
+    //   console.log(date.data.data.arr, "arr");
+    //   console.log(date, "date", obj);
+    // });
+  },
+  computed: {
+    // 模糊搜索
+    table() {
+      const search = this.search;
+      if (search) {
+        // filter() 方法创建一个新的数组，新数组中的元素是通过检查指定数组中符合条件的所有元素。
+        // 注意： filter() 不会对空数组进行检测。
+        // 注意： filter() 不会改变原始数组。
+        return this.tableData3.filter(data => {
+          // some() 方法用于检测数组中的元素是否满足指定条件;
+          // some() 方法会依次执行数组的每个元素：
+          // 如果有一个元素满足条件，则表达式返回true , 剩余的元素不会再执行检测;
+          // 如果没有满足条件的元素，则返回false。
+          // 注意： some() 不会对空数组进行检测。
+          // 注意： some() 不会改变原始数组。
+          return Object.keys(data).some(key => {
+            // indexOf() 返回某个指定的字符在某个字符串中首次出现的位置，如果没有找到就返回-1；
+            // 该方法对大小写敏感！所以之前需要toLowerCase()方法将所有查询到内容变为小写。
+            return (
+              String(data[key])
+                .toLowerCase()
+                .indexOf(search) > -1
+            );
+          });
+        });
+      }
+      return this.tableData3;
+    }
   },
   methods: {
     fn() {
@@ -340,8 +380,9 @@ export default {
       clearTimeout(this.timeout);
       this.timeout = setTimeout(() => {
         cb(results);
-      }, 3000 * Math.random());
+      }, 0 * Math.random());
     },
+
     createStateFilter(queryString) {
       return state => {
         return (
@@ -380,7 +421,7 @@ export default {
       clearTimeout(this.timeout);
       this.timeout = setTimeout(() => {
         cb(results);
-      }, 3000 * Math.random());
+      }, 0 * Math.random());
     },
     createStateFilter2(queryString) {
       return state => {
@@ -414,7 +455,7 @@ export default {
     },
     //table
     handleCurrentChange(val) {
-      console.log(val.date, "选中的哪一行");
+      console.log(val.id, "id", val.date, "选中的哪一行");
       this.currentRow = val;
     },
     showRow(row) {
@@ -439,13 +480,48 @@ export default {
       //     `镜像名是${this.state3} ` +
       //     `tomcat版本是${this.state2}`
       // );
-      var obj={'容器名':this.input,'端口号':'this.input2',
-              'jdk版本':'this.state4','宿主机目录':'this.input3',
-              '镜像名':this.state3,'tomcat版本':this.state2}
-      axios.post('/what',obj).then(date=>{
+      var obj = {
+        容器名: this.input,
+        端口号: "this.input2",
+        jdk版本: "this.state4",
+        宿主机目录: "this.input3",
+        镜像名: this.state3,
+        tomcat版本: this.state2
+      };
+      //发请求
+      axios.post("/what", obj).then(date => {
         console.log(date.data.arr);
-        console.log(obj,'post2',date,'请求的数据2')
-      })
+        console.log(obj, "post2", date, "请求的数据2");
+      });
+    },
+    //启动
+    startup() {
+      if (this.currentRow) {
+        axios.post("/what", this.currentRow.id).then(date => {
+          console.log(this.currentRow.id, "进入请求选中启动的行");
+        });
+      } else {
+        alert("请选择启动的行");
+      }
+    },
+    //停止
+    stop(){
+      if (this.currentRow) {
+        axios.post("/what", this.currentRow.id).then(date => {
+          console.log(this.currentRow.id, "进入请求选中停止的行");
+        });
+      } else {
+        alert("请选择停止的行");
+      }
+    },
+    restart(){
+            if (this.currentRow) {
+        axios.post("/what", this.currentRow.id).then(date => {
+          console.log(this.currentRow.id, "进入请求选中重启的行");
+        });
+      } else {
+        alert("请选择重启的行");
+      }
     }
   },
 
