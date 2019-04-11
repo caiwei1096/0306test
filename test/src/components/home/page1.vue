@@ -455,7 +455,7 @@ export default {
     },
     //table
     handleCurrentChange(val) {
-      console.log(  val.date, "选中的哪一行");
+      console.log(  val, "选中的哪一行");
       this.currentRow = val;
     },
     showRow(row) {
