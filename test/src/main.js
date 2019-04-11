@@ -10,7 +10,7 @@ import qs from "qs"
 Vue.prototype.$axios = axios;
 axios.defaults.baseURL =  " https://www.easy-mock.com/mock/5ca49105ea0dc52bf3b67ea8/testdate";
 
-添加请求拦截器
+//添加请求拦截器
 axios.interceptors.request.use(function (config) {
     // 参数格式转换
     console.log(config,'config')

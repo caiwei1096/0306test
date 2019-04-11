@@ -75,8 +75,8 @@
 
     <div style="float: right;padding-right: 50px;margin-bottom:10px">
       <el-button @click="startup" :disabled="isDisable">启动</el-button>
-      <el-button @click="stop">停止</el-button>
-      <el-button @click="restart">重启</el-button>
+      <el-button @click="stop" :disabled="isDisable">停止</el-button>
+      <el-button @click="restart" :disabled="isDisable">重启</el-button>
     </div>
     <el-table
       ref="singleTable"
