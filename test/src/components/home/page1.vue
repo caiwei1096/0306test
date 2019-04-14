@@ -64,7 +64,7 @@
 
           <div class="box4">
             <span class="box41">{{showbox}}</span>
-            <el-button type="danger" @click="submit" plain :disabled=isDisable>提交</el-button>
+            <el-button type="danger" @click="submit" plain :disabled="isDisable">提交</el-button>
           </div>
         </div>
 
@@ -124,6 +124,8 @@ export default {
   },
   data() {
     return {
+      //websorket
+      websock: null,
       //提示框
       showbox: "",
       Edit: false,
@@ -147,59 +149,8 @@ export default {
       //table
       currentRow: null,
       tableData31: [{ date: "", name: "", port: "" }],
-      tableData3: [
-        {
-          id: "1",
-          date: "容器名",
-          name: "镜像1",
-          port: "6706",
-          status: "是",
-          mainManageBrand: 0
-        },
-        {
-          id: "2",
-          date: "容器名2",
-          name: "镜像2",
-          port: "6706",
-          status: "是",
-          mainManageBrand: 0
-        },
-        {
-          id: "3",
-          date: "容器名3",
-          name: "镜像3",
-          port: "6706",
-          status: "是"
-        },
-        {
-          id: "4",
-          date: "容器名4",
-          name: "镜像4",
-          port: "6706",
-          status: "是"
-        },
-        {
-          id: "5",
-          date: "容器名5",
-          name: "镜像5",
-          port: "6706",
-          status: "是"
-        },
-        {
-          id: "6",
-          date: "容器名6",
-          name: "镜像6",
-          port: "6706",
-          status: "是"
-        },
-        {
-          id: "7",
-          date: "容器名7",
-          name: "镜像7",
-          port: "6706",
-          status: "是"
-        }
-      ],
+      //table
+      tableData3: [],
       multipleSelection: [],
       //  radio: '1'单选
       radio: "1",
@@ -209,12 +160,14 @@ export default {
     };
   },
   created() {
-    console.log(1, "created 发请求date1");
-    var obj = { name: 2, password: "3" };
-    axios.post('/what',obj).then(date => {
-      console.log( "arr");
-      // console.log(date, "date", obj);
-    });
+    //axios请求
+    axios.get('/data').then(date => {
+      console.log(date.data.data,'created date');
+    this.tableData3=date.data.data
+     });
+    //websorket请求
+     // this.initWebSocket();
+     console.log(document.body.clientWidth,'宽度')
   },
   computed: {
     // 模糊搜索
@@ -246,6 +199,31 @@ export default {
     }
   },
   methods: {
+    //websorket
+    initWebSocket(){ //初始化weosocket
+        const wsuri = "ws://localhost:8080"; 
+         this.websock = new WebSocket(wsuri); 
+          this.websock.onmessage = this.websocketonmessage;
+          this.websock.onopen = this.websocketonopen;
+          this.websock.onerror = this.websocketonerror;
+          this.websock.onclose = this.websocketclose;
+      },
+      websocketonopen(){ //连接建立之后执行send方法发送数据
+        let actions = {"test":"12345"};
+        this.websocketsend(JSON.stringify(actions));
+      },
+      websocketonerror(){//连接建立失败重连
+        this.initWebSocket();
+      },
+      websocketonmessage(e){ //数据接收
+        const redata = JSON.parse(e.data);
+      },
+      websocketsend(Data){//数据发送
+        this.websock.send(Data);
+      },
+      websocketclose(e){  //关闭
+        console.log('断开连接',e);
+      },
     fn() {
       this.Edit = false;
     },
@@ -545,7 +523,9 @@ export default {
         alert("请选择重启的行");
       }
     }
-  },
+  }
+
+  ,
 
   mounted() {
     //镜像名
@@ -624,7 +604,7 @@ export default {
 
 //卡片的背景颜色
 .el-card {
-  background: lightcyan;
+ 
   font-family: "微软雅黑";
 }
 .el-input--mini .el-input__inner {
